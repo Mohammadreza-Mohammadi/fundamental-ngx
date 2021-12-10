@@ -76,6 +76,9 @@ export class BreadcrumbComponent implements AfterContentInit, OnInit, OnDestroy 
     @Input()
     containerElement: HTMLElement;
 
+    @Input()
+    tabIndex = '0';
+
     /** @hidden */
     containerBoundary: number;
 

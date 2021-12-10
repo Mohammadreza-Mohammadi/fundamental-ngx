@@ -32,7 +32,7 @@ export const ActionSquashBreakpointPx = 1280;
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
     host: {
-        '[attr.tabindex]': '0'
+        '[attr.tabindex]': '-1'
     }
 })
 export class DynamicPageHeaderComponent implements OnInit, AfterViewInit, OnDestroy {
