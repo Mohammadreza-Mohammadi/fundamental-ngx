@@ -52,6 +52,10 @@ export class BreadcrumbComponent implements AfterContentInit, OnInit, OnDestroy 
     @Input()
     compact?: boolean;
 
+    /** Allow keyboard navigation through breadcrumb link */
+    @Input()
+    arrowNavigation = false;
+
     /** @hidden */
     @ContentChildren(forwardRef(() => BreadcrumbItemDirective))
     breadcrumbItems: QueryList<BreadcrumbItemDirective>;
@@ -75,9 +79,6 @@ export class BreadcrumbComponent implements AfterContentInit, OnInit, OnDestroy 
      */
     @Input()
     containerElement: HTMLElement;
-
-    @Input()
-    tabIndex = '0';
 
     /** @hidden */
     containerBoundary: number;

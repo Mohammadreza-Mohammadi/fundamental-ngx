@@ -1,4 +1,5 @@
 import {
+    AfterContentInit,
     AfterViewInit,
     ChangeDetectionStrategy,
     ChangeDetectorRef,
@@ -35,7 +36,7 @@ export const ActionSquashBreakpointPx = 1280;
         '[attr.tabindex]': '-1'
     }
 })
-export class DynamicPageHeaderComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DynamicPageHeaderComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
     /** @hidden */
     _collapsed = false;
 
@@ -91,6 +92,12 @@ export class DynamicPageHeaderComponent implements OnInit, AfterViewInit, OnDest
             this._collapsed = collapsed;
             this._changeDetRef.markForCheck();
         });
+    }
+
+    ngAfterContentInit(): void {
+        this._breadcrumbComponent.arrowNavigation = true;
+        console.log(this._breadcrumbComponent);
+        this._changeDetRef.detectChanges();
     }
 
     /** @hidden */
