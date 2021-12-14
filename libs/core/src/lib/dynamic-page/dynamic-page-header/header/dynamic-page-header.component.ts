@@ -33,7 +33,7 @@ export const ActionSquashBreakpointPx = 1280;
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
     host: {
-        '[attr.tabindex]': '-1'
+        '[attr.tabindex]': '0'
     }
 })
 export class DynamicPageHeaderComponent implements OnInit, AfterViewInit, AfterContentInit, OnDestroy {
@@ -94,10 +94,9 @@ export class DynamicPageHeaderComponent implements OnInit, AfterViewInit, AfterC
         });
     }
 
+    /** @hidden */
     ngAfterContentInit(): void {
         this._breadcrumbComponent.arrowNavigation = true;
-        console.log(this._breadcrumbComponent);
-        this._changeDetRef.detectChanges();
     }
 
     /** @hidden */

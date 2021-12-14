@@ -40,7 +40,8 @@ import { ContentDensityService } from '@fundamental-ngx/core/utils';
     // eslint-disable-next-line
     selector: 'fd-breadcrumb',
     host: {
-        class: 'fd-breadcrumb'
+        class: 'fd-breadcrumb',
+        role: 'tree'
     },
     templateUrl: './breadcrumb.component.html',
     styleUrls: ['./breadcrumb.component.scss'],
