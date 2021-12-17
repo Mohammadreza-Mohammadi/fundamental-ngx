@@ -15,16 +15,18 @@ import {
     ViewChild,
     ViewEncapsulation
 } from '@angular/core';
-import { ENTER, SPACE } from '@angular/cdk/keycodes';
+import { ENTER, SPACE, TAB } from '@angular/cdk/keycodes';
+import { FocusKeyManager } from '@angular/cdk/a11y';
+
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { RtlService } from '@fundamental-ngx/core/utils';
 import { KeyUtil } from '@fundamental-ngx/core/utils';
 import { MenuComponent } from '@fundamental-ngx/core/menu';
 import { Placement } from '@fundamental-ngx/core/shared';
+import { DynamicPageService } from '@fundamental-ngx/core/dynamic-page';
 import { ContentDensityService } from '@fundamental-ngx/core/utils';
 import { BreadcrumbItemDirective } from './breadcrumb-item.directive';
-import { BREADCRUMB_COMPONENT } from './breadcrumb.interface';
 
 /**
  * Breadcrumb parent wrapper directive. Must have breadcrumb item child directives.
@@ -48,13 +50,7 @@ import { BREADCRUMB_COMPONENT } from './breadcrumb.interface';
     templateUrl: './breadcrumb.component.html',
     styleUrls: ['./breadcrumb.component.scss'],
     encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [
-        {
-            provide: BREADCRUMB_COMPONENT,
-            useExisting: BreadcrumbComponent
-        }
-    ]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BreadcrumbComponent implements AfterContentInit, OnInit, OnDestroy {
     /** Whenever links wrapped inside overflow should be displayed in compact mode  */
@@ -93,25 +89,49 @@ export class BreadcrumbComponent implements AfterContentInit, OnInit, OnDestroy 
     containerBoundary: number;
 
     /** @hidden */
+    private _isRtl = false;
+
+    /** @hidden */
     private _subscriptions = new Subscription();
+
+    /** @hidden */
+    private _keyManager: FocusKeyManager<BreadcrumbItemDirective>;
 
     constructor(
         public elementRef: ElementRef,
         @Optional() private _rtlService: RtlService,
         @Optional() private _contentDensityService: ContentDensityService,
+        @Optional() private _dynamicPageService: DynamicPageService,
         private _cdRef: ChangeDetectorRef
     ) {}
 
     /** @hidden */
     ngAfterContentInit(): void {
         this.onResize();
+
+        if (this.arrowNavigation) {
+            this._keyManager = new FocusKeyManager<BreadcrumbItemDirective>(this.breadcrumbItems)
+                .withWrap()
+                .skipPredicate((item) => !(item.breadcrumbLink || item.href))
+                .withVerticalOrientation()
+                .withHorizontalOrientation(this._isRtl ? 'rtl' : 'ltr');
+
+            this._subscriptions.add(
+                this._keyManager.tabOut.subscribe(() => {
+                    this._dynamicPageService.focusLayoutAction.next();
+                })
+            );
+        }
     }
 
     /** @hidden */
     ngOnInit(): void {
         if (this._rtlService) {
             this._subscriptions.add(
-                this._rtlService.rtl.subscribe((value) => this.placement$.next(value ? 'bottom-end' : 'bottom-start'))
+                this._rtlService.rtl.subscribe((value) => {
+                    this._isRtl = value;
+                    this.placement$.next(value ? 'bottom-end' : 'bottom-start');
+                })
             );
         }
         if (this.compact === undefined && this._contentDensityService) {
@@ -154,6 +174,21 @@ export class BreadcrumbComponent implements AfterContentInit, OnInit, OnDestroy 
         }
         this.previousContainerWidth = this.containerBoundary;
         this._cdRef.detectChanges();
+    }
+
+    @HostListener('keydown', ['$event'])
+    handleArrowKeydown(event: KeyboardEvent): void {
+        if (this.arrowNavigation) {
+            if (this._keyManager.activeItem === null) {
+                this._keyManager.setActiveItem(0);
+            }
+
+            if (KeyUtil.isKeyCode(event, TAB)) {
+                event.preventDefault();
+            }
+
+            this._keyManager.onKeydown(event);
+        }
     }
 
     /** @hidden */

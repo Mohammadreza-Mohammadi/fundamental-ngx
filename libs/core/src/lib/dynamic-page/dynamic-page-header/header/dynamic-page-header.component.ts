@@ -13,15 +13,15 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 
-import { DYNAMIC_PAGE_CLASS_NAME, DynamicPageResponsiveSize } from '../../constants';
-import { DynamicPageService } from '../../dynamic-page.service';
-import { addClassNameToElement } from '../../utils';
-import { BreadcrumbComponent } from '@fundamental-ngx/core/breadcrumb';
-import { DynamicPageGlobalActionsComponent } from '../actions/dynamic-page-global-actions.component';
-import { DynamicPageTitleContentComponent } from '../actions/dynamic-page-title-content.component';
-
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
+import { BreadcrumbComponent } from '@fundamental-ngx/core/breadcrumb';
+import { DynamicPageService } from '../../dynamic-page.service';
+import { DynamicPageGlobalActionsComponent } from '../actions/dynamic-page-global-actions.component';
+import { DynamicPageTitleContentComponent } from '../actions/dynamic-page-title-content.component';
+import { DYNAMIC_PAGE_CLASS_NAME, DynamicPageResponsiveSize } from '../../constants';
+import { addClassNameToElement } from '../../utils';
 
 export const ActionSquashBreakpointPx = 1280;
 
