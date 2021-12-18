@@ -7,6 +7,7 @@ import {
     ElementRef,
     forwardRef,
     HostListener,
+    Inject,
     Input,
     OnDestroy,
     OnInit,
@@ -22,10 +23,10 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { RtlService } from '@fundamental-ngx/core/utils';
 import { KeyUtil } from '@fundamental-ngx/core/utils';
+import { DYNAMIC_PAGE_HEADER_COMPONENT, DynamicPageHeaderInterface } from '@fundamental-ngx/core/utils';
+import { ContentDensityService } from '@fundamental-ngx/core/utils';
 import { MenuComponent } from '@fundamental-ngx/core/menu';
 import { Placement } from '@fundamental-ngx/core/shared';
-import { DynamicPageService } from '@fundamental-ngx/core/dynamic-page';
-import { ContentDensityService } from '@fundamental-ngx/core/utils';
 import { BreadcrumbItemDirective } from './breadcrumb-item.directive';
 
 /**
@@ -101,7 +102,7 @@ export class BreadcrumbComponent implements AfterContentInit, OnInit, OnDestroy 
         public elementRef: ElementRef,
         @Optional() private _rtlService: RtlService,
         @Optional() private _contentDensityService: ContentDensityService,
-        @Optional() private _dynamicPageService: DynamicPageService,
+        @Optional() @Inject(DYNAMIC_PAGE_HEADER_COMPONENT) private _dynamicPageHeader: DynamicPageHeaderInterface,
         private _cdRef: ChangeDetectorRef
     ) {}
 
@@ -118,7 +119,7 @@ export class BreadcrumbComponent implements AfterContentInit, OnInit, OnDestroy 
 
             this._subscriptions.add(
                 this._keyManager.tabOut.subscribe(() => {
-                    this._dynamicPageService.focusLayoutAction.next();
+                    this._dynamicPageHeader.focusLayoutAction();
                 })
             );
         }
