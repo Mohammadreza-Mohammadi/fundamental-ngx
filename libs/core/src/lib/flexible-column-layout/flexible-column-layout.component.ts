@@ -103,6 +103,18 @@ export class FlexibleColumnLayoutComponent implements AfterViewInit, OnChanges, 
     @Input()
     customOnResizeFunction: () => void;
 
+    /** aria-label for separator */
+    @Input()
+    separatorAriaLabel: string;
+
+    /** title for expanded button */
+    @Input()
+    expandTitle: string;
+
+    /** title for collapsed button */
+    @Input()
+    collapseTitle: string;
+
     /**
      * left column separator value (between start and middle columns)
      * that specifies the direction of the arrow and
