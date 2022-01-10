@@ -5,7 +5,7 @@
     <li fd-list-item *ngFor="let i of items">
         <span fd-list-title> List Item {{ i }} </span>
     </li>
-    <li fd-list-item [action]="true" [growing]="true" tabindex="-1">
+    <li fd-list-item [action]="true" [growing]="true">
         <button fd-list-title (click)="loadMore()">
             <fd-busy-indicator [block]="false" [loading]="loading"></fd-busy-indicator>
             <span fd-list-title-text> Show More </span>
