@@ -66,7 +66,7 @@
  *
  */
 import { InjectionToken } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 export enum MatchingStrategy {
@@ -153,7 +153,7 @@ export abstract class DataProvider<T> {
 
 export class ComboBoxDataSource<T> implements DataSource<T> {
     static readonly MaxLimit = 5;
-    protected dataChanges: BehaviorSubject<T[]> = new BehaviorSubject<T[]>([]);
+    protected dataChanges: Subject<T[]> = new Subject<T[]>();
 
     protected _onDestroy$ = new Subject<void>();
 
